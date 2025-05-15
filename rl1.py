@@ -11,7 +11,8 @@ import io
 
 # ------------ Model & Explainer Utilities ------------
 @st.cache_resource
-rdef load_model(path: str = "models/cartpole_ppo") -> PPO:
+
+def load_model(path: str = "models/cartpole_ppo") -> PPO:
     """
     Load a trained PPO model from the given path (without .zip extension).
     """
@@ -36,7 +37,8 @@ def predict(states: np.ndarray) -> np.ndarray:
     return probs
 
 @st.cache_resource
-rdef get_background_states(n_samples: int = 100) -> np.ndarray:
+
+def get_background_states(n_samples: int = 100) -> np.ndarray:
     """
     Sample random states from the CartPole environment for explainers.
     """
@@ -44,7 +46,8 @@ rdef get_background_states(n_samples: int = 100) -> np.ndarray:
     return np.array([env.observation_space.sample() for _ in range(n_samples)])
 
 @st.cache_resource
-rdef get_lime_explainer() -> LimeTabularExplainer:
+
+def get_lime_explainer() -> LimeTabularExplainer:
     """
     Initialize a LIME explainer with background states.
     """
@@ -57,7 +60,8 @@ rdef get_lime_explainer() -> LimeTabularExplainer:
     )
 
 @st.cache_resource
-rdef get_shap_explainer() -> shap.KernelExplainer:
+
+def get_shap_explainer():
     """
     Initialize a SHAP explainer with background states.
     """
@@ -87,12 +91,12 @@ def run_app():
         labels = ["Cart Position", "Cart Velocity", "Pole Angle", "Pole Angular Velocity"]
         ranges = [(-4.8, 4.8), (-5.0, 5.0), (-0.418, 0.418), (-5.0, 5.0)]
         state = np.array([
-            st.slider(label, float(low), float(high), float((low + high) / 2))
+            st.sidebar.slider(label, float(low), float(high), float((low + high) / 2))
             for label, (low, high) in zip(labels, ranges)
         ]).reshape(1, -1)
 
-        method = st.radio("Choose Explainer", ["LIME", "SHAP"])
-        if st.button("Generate Explanation"):
+        method = st.sidebar.radio("Choose Explainer", ["LIME", "SHAP"])
+        if st.sidebar.button("Generate Explanation"):
             try:
                 if method == "LIME":
                     explainer = get_lime_explainer()
