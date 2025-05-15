@@ -2,12 +2,7 @@
 import os
 import streamlit as st
 import numpy as np
-# Import Gym with fallback to show a friendly error in Streamlit
-try:
-    import gym
-except ModuleNotFoundError:
-    st.error("Missing dependency: gym. Please install it via 'pip install gym'.")
-    st.stop()
+import gymnasium as gym  # using Gymnasium for environment compatibility
 from stable_baselines3 import PPO
 from lime.lime_tabular import LimeTabularExplainer
 import shap
