@@ -2,7 +2,12 @@
 import os
 import streamlit as st
 import numpy as np
-import gym
+# Import Gym with fallback to show a friendly error in Streamlit
+try:
+    import gym
+except ModuleNotFoundError:
+    st.error("Missing dependency: gym. Please install it via 'pip install gym'.")
+    st.stop()
 from stable_baselines3 import PPO
 from lime.lime_tabular import LimeTabularExplainer
 import shap
@@ -11,7 +16,6 @@ import io
 
 # ------------ Model & Explainer Utilities ------------
 @st.cache_resource
-
 def load_model(path: str = "models/cartpole_ppo") -> PPO:
     """
     Load a trained PPO model from the given path (without .zip extension).
@@ -37,7 +41,6 @@ def predict(states: np.ndarray) -> np.ndarray:
     return probs
 
 @st.cache_resource
-
 def get_background_states(n_samples: int = 100) -> np.ndarray:
     """
     Sample random states from the CartPole environment for explainers.
@@ -46,7 +49,6 @@ def get_background_states(n_samples: int = 100) -> np.ndarray:
     return np.array([env.observation_space.sample() for _ in range(n_samples)])
 
 @st.cache_resource
-
 def get_lime_explainer() -> LimeTabularExplainer:
     """
     Initialize a LIME explainer with background states.
@@ -60,8 +62,7 @@ def get_lime_explainer() -> LimeTabularExplainer:
     )
 
 @st.cache_resource
-
-def get_shap_explainer():
+def get_shap_explainer() -> shap.KernelExplainer:
     """
     Initialize a SHAP explainer with background states.
     """
