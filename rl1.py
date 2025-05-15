@@ -160,6 +160,6 @@ if __name__ == "__main__":
             run_app()
     else:
         # Command line execution
-        print("To run the Streamlit app, use: streamlit run rl1.py")
+        print("To run the Streamlit app, use: streamlit run RLProject.py")
         print("To train a model without Streamlit, uncomment the line below:")
         # train_and_save()
